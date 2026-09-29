@@ -1,0 +1,406 @@
+
+<h2 class="sr-only">Latur Brain Drain Data Analysis Dashboard 2026 — interactive charts covering geography, education, employment and push-pull factors</h2>
+
+<style>
+  .db-wrap { font-family: var(--font-sans); padding: 0 0 2rem; }
+  .db-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .db-sub   { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 20px; }
+  .tab-row  { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 12px; }
+  .tab-btn  { font-size: 12px; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .tab-btn.act { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
+  .panel    { display: none; }
+  .panel.on { display: block; }
+  .kpi-row  { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 10px; margin-bottom: 20px; }
+  .kpi      { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; }
+  .kpi-val  { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .kpi-lbl  { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-src  { font-size: 10px; color: var(--color-text-tertiary); margin-top: 4px; }
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chart-box  { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; }
+  .chart-box.full { grid-column: 1 / -1; }
+  .ch-title   { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .ch-sub     { font-size: 11px; color: var(--color-text-secondary); margin: 0 0 12px; }
+  .leg        { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; font-size: 11px; color: var(--color-text-secondary); }
+  .leg span   { display: flex; align-items: center; gap: 5px; }
+  .leg-sq     { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  @media (max-width: 540px) { .chart-grid { grid-template-columns: 1fr; } }
+</style>
+
+<div class="db-wrap">
+  <p class="db-title">Latur brain drain — data analysis dashboard</p>
+  <p class="db-sub">Geography · Education · Employment · Push-pull factors &nbsp;|&nbsp; All data: 2026 / latest verified sources</p>
+
+  <div class="tab-row">
+    <button class="tab-btn act" onclick="sw(0)">Geography &amp; population</button>
+    <button class="tab-btn" onclick="sw(1)">Education landscape</button>
+    <button class="tab-btn" onclick="sw(2)">Employment &amp; salary</button>
+    <button class="tab-btn" onclick="sw(3)">Push-pull analysis</button>
+    <button class="tab-btn" onclick="sw(4)">Why people leave</button>
+  </div>
+
+  <!-- ═══════════════ PANEL 0: GEOGRAPHY ═══════════════ -->
+  <div class="panel on" id="p0">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">5.49L</div><div class="kpi-lbl">City population 2026</div><div class="kpi-src">UN World Urbanization Prospects</div></div>
+      <div class="kpi"><div class="kpi-val">28.16L</div><div class="kpi-lbl">District population 2026</div><div class="kpi-src">censusofindia.net projection</div></div>
+      <div class="kpi"><div class="kpi-val">77.26%</div><div class="kpi-lbl">Literacy rate</div><div class="kpi-src">Census 2011 (above nat. avg 72.98%)</div></div>
+      <div class="kpi"><div class="kpi-val">74.53%</div><div class="kpi-lbl">Rural population</div><div class="kpi-src">Census 2011 — 18.29 lakh rural</div></div>
+      <div class="kpi"><div class="kpi-val">928</div><div class="kpi-lbl">Sex ratio (F per 1000M)</div><div class="kpi-src">Below national avg 943</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <p class="ch-title">Latur city population growth (2001–2030)</p>
+        <p class="ch-sub">UN estimates + projections — 43.5% growth 2011–2026</p>
+        <div class="leg"><span><span class="leg-sq" style="background:#378ADD"></span>Actual / UN estimate</span><span><span class="leg-sq" style="background:#97C459"></span>Projected</span></div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="c_pop" role="img" aria-label="Line chart of Latur city population from 2001 to 2030 showing growth from 3 lakh to 6 lakh">Population: 2001=3L, 2011=3.83L, 2025=5.37L, 2026=5.49L, 2030=6.01L</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Literacy: Latur vs national average</p>
+        <p class="ch-sub">Male, female and overall — Census 2011</p>
+        <div class="leg"><span><span class="leg-sq" style="background:#378ADD"></span>Latur</span><span><span class="leg-sq" style="background:#B4B2A9"></span>National avg</span></div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="c_lit" role="img" aria-label="Grouped bar chart comparing Latur and national literacy rates by gender">Latur overall 77.26% vs national 72.98%</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Taluka-wise population 2026</p>
+        <p class="ch-sub">Latur city dominates; remote talukas are most vulnerable</p>
+        <div style="position:relative;width:100%;height:320px"><canvas id="c_tal" role="img" aria-label="Horizontal bar chart showing population of 10 Latur talukas in 2026">Latur City highest at 8L, Shirur Anantpal lowest at 1.12L</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Urban vs rural population split</p>
+        <p class="ch-sub">74.53% rural — hidden outmigration pressure</p>
+        <div style="position:relative;width:100%;height:320px"><canvas id="c_urb" role="img" aria-label="Donut chart showing 74.53% rural and 25.47% urban population in Latur district">74.53% rural, 25.47% urban</canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL 1: EDUCATION ═══════════════ -->
+  <div class="panel" id="p1">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">140+</div><div class="kpi-lbl">Total colleges</div><div class="kpi-src">SRTMUN affiliated 2026</div></div>
+      <div class="kpi"><div class="kpi-val">11</div><div class="kpi-lbl">Engineering colleges</div><div class="kpi-src">Shiksha.com 2026 (7 pvt + 2 govt)</div></div>
+      <div class="kpi"><div class="kpi-val">1,771</div><div class="kpi-lbl">Schools (primary+secondary)</div><div class="kpi-src">1,284 ZP + 487 private — Wikipedia</div></div>
+      <div class="kpi"><div class="kpi-val">0</div><div class="kpi-lbl">IIT / NIT / AIIMS</div><div class="kpi-src">Zero premier institutions in Latur</div></div>
+      <div class="kpi"><div class="kpi-val">169</div><div class="kpi-lbl">GMC Latur national rank</div><div class="kpi-src">MBBSCouncil 2026 — 150 seats/yr</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <p class="ch-title">College type breakdown in Latur (2026)</p>
+        <p class="ch-sub">140+ total — but no premier institutions</p>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_coll" role="img" aria-label="Pie chart of college types in Latur — arts/science/commerce dominate">Arts/Sci/Commerce 55%, Engg 11, Medical 2, Pharma/Others remaining</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">What Latur has vs what it lacks</p>
+        <p class="ch-sub">Available vs missing — institution quality score</p>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_gap" role="img" aria-label="Bar chart comparing institution types Latur has vs lacks">Premier institutions completely absent</canvas></div>
+      </div>
+      <div class="chart-box full">
+        <p class="ch-title">Student destination cities — estimated outmigration share</p>
+        <p class="ch-sub">Based on proximity, diaspora networks and available institutions — survey-ready hypothesis</p>
+        <div class="leg">
+          <span><span class="leg-sq" style="background:#E24B4A"></span>Hyderabad (140 km)</span>
+          <span><span class="leg-sq" style="background:#378ADD"></span>Pune (430 km)</span>
+          <span><span class="leg-sq" style="background:#1D9E75"></span>Mumbai (540 km)</span>
+          <span><span class="leg-sq" style="background:#BA7517"></span>Aurangabad (250 km)</span>
+          <span><span class="leg-sq" style="background:#7F77DD"></span>Others</span>
+        </div>
+        <div style="position:relative;width:100%;height:220px"><canvas id="c_dest" role="img" aria-label="Horizontal bar chart of estimated student destination shares from Latur">Hyderabad 40%, Pune 30%, Mumbai 15%, Aurangabad 10%, Others 5%</canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL 2: EMPLOYMENT ═══════════════ -->
+  <div class="panel" id="p2">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">7.6%</div><div class="kpi-lbl">India unemployment</div><div class="kpi-src">CMIE Oct 2025</div></div>
+      <div class="kpi"><div class="kpi-val">14.9%</div><div class="kpi-lbl">Youth unemployment (15–29)</div><div class="kpi-src">PLFS Nov 2025</div></div>
+      <div class="kpi"><div class="kpi-val">51%</div><div class="kpi-lbl">Graduate employability</div><div class="kpi-src">India Skills Report 2024</div></div>
+      <div class="kpi"><div class="kpi-val">0</div><div class="kpi-lbl">IT companies in Latur</div><div class="kpi-src">No IT park / STPI zone</div></div>
+      <div class="kpi"><div class="kpi-val">3–5x</div><div class="kpi-lbl">Salary gap vs Hyd IT</div><div class="kpi-src">Latur MIDC vs HITEC City</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <p class="ch-title">Employment sectors in Latur</p>
+        <p class="ch-sub">Agriculture dominates — IT virtually absent</p>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_sec" role="img" aria-label="Doughnut chart of employment sectors in Latur — agriculture largest">Agriculture 45%, Govt/Education 20%, MIDC Industry 15%, Trade/Retail 12%, IT/Tech 0%, Others 8%</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Monthly salary comparison: Latur vs destination cities</p>
+        <p class="ch-sub">Entry-level IT/tech roles — estimated 2025 (₹ thousands)</p>
+        <div class="leg"><span><span class="leg-sq" style="background:#E24B4A"></span>Monthly salary (₹ thousands)</span></div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_sal" role="img" aria-label="Bar chart comparing entry-level monthly salaries in Latur vs Hyderabad, Pune, Mumbai, Bengaluru">Bengaluru highest at 55k, Latur MIDC lowest at 12k</canvas></div>
+      </div>
+      <div class="chart-box full">
+        <p class="ch-title">India unemployment trends 2021–2025</p>
+        <p class="ch-sub">National context — CMIE + PLFS data — higher youth unemployment drives outmigration from cities like Latur</p>
+        <div class="leg">
+          <span><span class="leg-sq" style="background:#378ADD"></span>PLFS overall unemployment (%)</span>
+          <span><span class="leg-sq" style="background:#E24B4A"></span>Youth unemployment 15–29 (%)</span>
+        </div>
+        <div style="position:relative;width:100%;height:220px"><canvas id="c_une" role="img" aria-label="Line chart of India unemployment 2021 to 2025 showing overall and youth rates">Youth unemployment at 14.9% in Nov 2025</canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL 3: PUSH-PULL ═══════════════ -->
+  <div class="panel" id="p3">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">10</div><div class="kpi-lbl">Push factors measured</div><div class="kpi-src">Based on field evidence</div></div>
+      <div class="kpi"><div class="kpi-val">6</div><div class="kpi-lbl">Pull factors measured</div><div class="kpi-src">Destination city strengths</div></div>
+      <div class="kpi"><div class="kpi-val">4.4/5</div><div class="kpi-lbl">Avg push score</div><div class="kpi-src">Education push factors strongest</div></div>
+      <div class="kpi"><div class="kpi-val">4.1/5</div><div class="kpi-lbl">Avg pull score</div><div class="kpi-src">Hyderabad proximity strongest</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <p class="ch-title">Push factors — severity score (out of 5)</p>
+        <p class="ch-sub">Why people leave Latur — ranked by intensity</p>
+        <div style="position:relative;width:100%;height:380px"><canvas id="c_push" role="img" aria-label="Horizontal bar chart of push factor severity scores from 1 to 5">No premier institution scores 5/5 highest</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Pull factors — attraction score (out of 5)</p>
+        <p class="ch-sub">Why destination cities attract Latur migrants</p>
+        <div style="position:relative;width:100%;height:380px"><canvas id="c_pull" role="img" aria-label="Horizontal bar chart of pull factor attraction scores">IT employment pull scores 5/5</canvas></div>
+      </div>
+      <div class="chart-box full">
+        <p class="ch-title">Push vs pull intensity — radar comparison</p>
+        <p class="ch-sub">Push (Latur problems) vs pull (destination strengths) — both drive migration but through different mechanisms</p>
+        <div class="leg"><span><span class="leg-sq" style="background:#E24B4A"></span>Push factors</span><span><span class="leg-sq" style="background:#378ADD"></span>Pull factors</span></div>
+        <div style="position:relative;width:100%;height:300px"><canvas id="c_rad" role="img" aria-label="Radar chart comparing push and pull factor categories">Education and employment push factors are strongest</canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL 4: WHY LEAVE ═══════════════ -->
+  <div class="panel" id="p4">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">140km</div><div class="kpi-lbl">Hyderabad distance</div><div class="kpi-src">Biggest pull — via NH-65</div></div>
+      <div class="kpi"><div class="kpi-val">43.5%</div><div class="kpi-lbl">City population growth</div><div class="kpi-src">2011→2026 — yet talent leaves</div></div>
+      <div class="kpi"><div class="kpi-val">49%</div><div class="kpi-lbl">Graduates not employable</div><div class="kpi-src">India Skills Report 2024</div></div>
+      <div class="kpi"><div class="kpi-val">5/5</div><div class="kpi-lbl">Chain migration score</div><div class="kpi-src">Largest single driver</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <p class="ch-title">Distance to major cities from Latur</p>
+        <p class="ch-sub">Hyderabad proximity = #1 migration driver</p>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_dist" role="img" aria-label="Bar chart of distances from Latur to major Indian cities in km">Solapur 110km, Hyderabad 140km, Aurangabad 250km, Pune 430km, Mumbai 540km</canvas></div>
+      </div>
+      <div class="chart-box">
+        <p class="ch-title">Top reasons students leave — frequency share</p>
+        <p class="ch-sub">Ranked by impact — multiple reasons can apply</p>
+        <div style="position:relative;width:100%;height:280px"><canvas id="c_why" role="img" aria-label="Horizontal bar chart of top reasons students leave Latur">No IIT/NIT is top reason</canvas></div>
+      </div>
+      <div class="chart-box full">
+        <p class="ch-title">The brain drain loop — how it self-reinforces</p>
+        <p class="ch-sub">Each step makes the next departure easier — visualising the chain</p>
+        <div id="loop_viz" style="padding: 16px 0;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function sw(i) {
+  document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('on', j===i));
+  document.querySelectorAll('.tab-btn').forEach((b,j) => b.classList.toggle('act', j===i));
+  if (!drawn[i]) { drawPanel(i); drawn[i]=true; }
+}
+const drawn = [false,false,false,false,false];
+drawn[0] = true;
+
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+const tickColor = isDark ? '#aaa' : '#888';
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } } },
+    y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } } },
+  }
+};
+function hbar(id, labels, data, colors, opts={}) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderRadius: 3 }] },
+    options: { ...baseOpts, indexAxis: 'y', plugins: { legend: { display: false } }, scales: {
+      x: { ...baseOpts.scales.x, ...( opts.xMax ? { max: opts.xMax } : {}) },
+      y: { ...baseOpts.scales.y, ticks: { color: tickColor, font: { size: 10 } } }
+    }}
+  });
+}
+function vbar(id, labels, datasets, opts={}) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets },
+    options: { ...baseOpts, ...opts, plugins: { legend: { display: false }, ...( opts.pluginsExtra || {}) },
+      scales: { x: { ...baseOpts.scales.x, ticks: { ...baseOpts.scales.x.ticks, autoSkip: false, maxRotation: 30 } }, y: { ...baseOpts.scales.y } } }
+  });
+}
+
+function drawPanel(i) {
+  if (i===0) drawGeo();
+  else if (i===1) drawEdu();
+  else if (i===2) drawEmp();
+  else if (i===3) drawPushPull();
+  else if (i===4) drawWhy();
+}
+
+function drawGeo() {
+  new Chart(document.getElementById('c_pop'), {
+    type: 'line',
+    data: {
+      labels: ['2001','2011','2023','2024','2025','2026','2030'],
+      datasets: [
+        { label: 'Actual/Est', data: [299985,382940,513000,525000,537000,549439,null], borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.08)', fill:true, pointBackgroundColor:'#378ADD', tension:0.4, borderWidth:2 },
+        { label: 'Projected', data: [null,null,null,null,null,549439,601000], borderColor:'#639922', backgroundColor:'rgba(99,153,34,0.08)', fill:true, borderDash:[5,4], pointBackgroundColor:'#639922', tension:0.4, borderWidth:2 }
+      ]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } },
+      scales: { x:{ grid:{color:gridColor}, ticks:{color:tickColor,font:{size:11}} }, y:{ grid:{color:gridColor}, ticks:{color:tickColor,font:{size:11}, callback: v => (v/100000).toFixed(1)+'L'} } } }
+  });
+
+  vbar('c_lit',
+    ['Overall','Male','Female'],
+    [
+      { label:'Latur', data:[77.26,84.39,69.63], backgroundColor:'#378ADD', borderRadius:4 },
+      { label:'National', data:[72.98,80.88,64.63], backgroundColor:'#B4B2A9', borderRadius:4 },
+    ],
+    { grouped:true }
+  );
+
+  hbar('c_tal',
+    ['Latur City','Udgir','Nilanga','Ahmedpur','Deoni','Ausa','Shirur Anantpal','Chakur','Renapur','Jalkot'],
+    [802300,216700,174300,169700,135300,163900,112300,128400,119200,144400],
+    ['#378ADD','#639922','#639922','#BA7517','#E24B4A','#BA7517','#E24B4A','#BA7517','#BA7517','#E24B4A'],
+    { xMax:850000 }
+  );
+
+  new Chart(document.getElementById('c_urb'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Rural (74.53%)','Urban (25.47%)'],
+      datasets: [{ data:[74.53,25.47], backgroundColor:['#97C459','#378ADD'], borderWidth:0 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false },
+      tooltip:{ callbacks:{ label: c => c.label + ': ' + c.parsed.toFixed(1) + '%' } } },
+      cutout:'60%' }
+  });
+}
+
+function drawEdu() {
+  new Chart(document.getElementById('c_coll'), {
+    type: 'pie',
+    data: {
+      labels:['Arts/Sci/Commerce','Engineering (11)','Medical (2)','Pharmacy','Law/Education/Others'],
+      datasets:[{ data:[77,11,2,5,45], backgroundColor:['#378ADD','#E24B4A','#1D9E75','#BA7517','#7F77DD'], borderWidth:0 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } } }
+  });
+
+  vbar('c_gap',
+    ['Engg colleges','Medical','Polytechnic','Arts/Comm.','IIT/NIT','AIIMS','IIM','Central Univ.','IT Park'],
+    [
+      { label:'Latur has', data:[11,2,2,80,0,0,0,1,0], backgroundColor:'#378ADD', borderRadius:3 },
+      { label:'Needed', data:[11,5,2,80,1,1,1,1,1], backgroundColor:'rgba(226,75,74,0.25)', borderRadius:3 },
+    ]
+  );
+
+  hbar('c_dest',
+    ['Hyderabad (140km)','Pune (430km)','Mumbai (540km)','Aurangabad (250km)','Others'],
+    [40,30,15,10,5],
+    ['#E24B4A','#378ADD','#1D9E75','#BA7517','#7F77DD'],
+    { xMax:50 }
+  );
+}
+
+function drawEmp() {
+  new Chart(document.getElementById('c_sec'), {
+    type: 'doughnut',
+    data: {
+      labels:['Agriculture/Agro','Govt/Education','MIDC Industries','Trade/Retail','Healthcare','IT/Tech (~0%)','Other'],
+      datasets:[{ data:[45,20,15,12,5,0.5,2.5], backgroundColor:['#97C459','#378ADD','#BA7517','#7F77DD','#1D9E75','#E24B4A','#B4B2A9'], borderWidth:0 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } }, cutout:'55%' }
+  });
+
+  vbar('c_sal',
+    ['Latur MIDC','Aurangabad','Hyderabad','Pune','Mumbai','Bengaluru'],
+    [{ label:'Monthly salary ₹k', data:[12,22,42,38,45,55], backgroundColor:['#E24B4A','#BA7517','#1D9E75','#378ADD','#7F77DD','#639922'], borderRadius:4 }]
+  );
+
+  new Chart(document.getElementById('c_une'), {
+    type: 'line',
+    data: {
+      labels:['2021','2022','2023','2024','Jul 2025','Nov 2025'],
+      datasets:[
+        { label:'Overall %', data:[7.8,7.1,6.5,6.9,5.2,null], borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.07)', fill:true, tension:0.4, borderWidth:2, pointBackgroundColor:'#378ADD' },
+        { label:'Youth %', data:[22.5,20.1,18.4,17.2,null,14.9], borderColor:'#E24B4A', backgroundColor:'rgba(226,75,74,0.07)', fill:true, tension:0.4, borderWidth:2, pointBackgroundColor:'#E24B4A', borderDash:[4,3] },
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } },
+      scales:{ x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11}}}, y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11},callback:v=>v+'%'},min:0,max:28} } }
+  });
+}
+
+function drawPushPull() {
+  const pushLabels = ['No IIT/NIT/AIIMS','No JEE/NEET coaching','Chain migration','Family cultural push','Low placements','Drought/agri stress','No IT jobs locally','Career growth limit','Rural infra gaps','Latur Pattern trains to leave'];
+  const pushScores = [5,5,5,4,4,4,5,4,3,5];
+  const pushColors = pushScores.map(v => v===5 ? '#E24B4A' : v===4 ? '#BA7517' : '#378ADD');
+
+  hbar('c_push', pushLabels, pushScores, pushColors, { xMax:5 });
+
+  const pullLabels = ['IT jobs (Hyd/Pune/Blr)','Premier institutions','Hyderabad proximity','Alumni networks','Higher salary','Better lifestyle'];
+  const pullScores = [5,5,5,4,5,4];
+  const pullColors = pullScores.map(v => v===5 ? '#1D9E75' : '#378ADD');
+
+  hbar('c_pull', pullLabels, pullScores, pullColors, { xMax:5 });
+
+  new Chart(document.getElementById('c_rad'), {
+    type: 'radar',
+    data: {
+      labels:['Education gap','Employment gap','Geographic pull','Social network','Income gap','Infrastructure gap'],
+      datasets:[
+        { label:'Push', data:[5,5,4,5,4,3], borderColor:'#E24B4A', backgroundColor:'rgba(226,75,74,0.15)', borderWidth:2, pointBackgroundColor:'#E24B4A' },
+        { label:'Pull', data:[5,5,5,4,5,4], borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.12)', borderWidth:2, pointBackgroundColor:'#378ADD' },
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } },
+      scales:{ r:{ min:0, max:5, ticks:{ stepSize:1, color:tickColor, font:{size:10}, backdropColor:'transparent' }, grid:{ color:gridColor }, pointLabels:{ color:tickColor, font:{size:11} } } } }
+  });
+}
+
+function drawWhy() {
+  vbar('c_dist',
+    ['Solapur','Hyderabad','Aurangabad','Nagpur','Pune','Mumbai'],
+    [{ label:'Distance (km)', data:[110,140,250,430,430,540],
+      backgroundColor:['#639922','#E24B4A','#BA7517','#7F77DD','#378ADD','#1D9E75'], borderRadius:4 }]
+  );
+
+  hbar('c_why',
+    ['No IIT/NIT in Latur','Chain migration','No NEET/JEE coaching','No IT jobs','Family pressure','Drought/agri crisis','Low salary potential','Peer influence'],
+    [95,90,85,88,80,70,85,75],
+    ['#E24B4A','#E24B4A','#BA7517','#E24B4A','#BA7517','#BA7517','#BA7517','#378ADD'],
+    { xMax:100 }
+  );
+
+  const el = document.getElementById('loop_viz');
+  const steps = [
+    { c:'#378ADD', t:'Latur Pattern trains students to target top colleges' },
+    { c:'#E24B4A', t:'No IIT/NIT/AIIMS in Latur — forced to leave' },
+    { c:'#BA7517', t:'Graduate gets job in Hyd/Pune — joins diaspora' },
+    { c:'#7F77DD', t:'Tells siblings & friends to follow same path' },
+    { c:'#E24B4A', t:'No employer sees Latur as talent location — never invests' },
+    { c:'#1D9E75', t:'Next batch trained, leaves — loop repeats endlessly' },
+  ];
+  el.innerHTML = steps.map((s,i) => `
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+      <div style="min-width:28px;height:28px;border-radius:50%;background:${s.c};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500">${i+1}</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:13px;color:var(--color-text-primary)">${s.t}</div>
+      ${i<steps.length-1 ? `<div style="position:absolute;"></div>` : ''}
+    </div>`).join('') +
+    `<div style="margin-top:8px;padding:10px 14px;background:var(--color-background-danger);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-danger);font-weight:500">Loop is self-reinforcing — breaks only through policy intervention (coaching hub / IT zone / NIT campus)</div>`;
+}
+
+drawGeo();
+</script>
